@@ -22,7 +22,7 @@ class HTTPHandler(BaseHTTPRequestHandler):
 
 <body>
     <p>Server Addr <strong>%s:%s</strong></p>
-    <input id="input_msg" type="text" />
+    <textarea id="input_msg"></textarea>
     <button id="send">Send</button>
     <p>↓ Scan QR code to quickly enter this page ↓</p>
     <div id="qrcode"></div>

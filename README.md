@@ -31,7 +31,7 @@ Starting server, listening http://[IP]:8080 use <Ctrl-C> to stop
 
 Then visit that site, there will be a simple page including:
 
-- `input` the text what you need to forward
+- `textarea` text need to forward
 
 - `button` click to forward to server
 
