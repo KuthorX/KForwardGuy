@@ -5,7 +5,7 @@ import os
 
 ip = None
 port = None
-
+extra = None
 
 class HTTPHandler(BaseHTTPRequestHandler):
 
@@ -22,6 +22,7 @@ class HTTPHandler(BaseHTTPRequestHandler):
 
 <body>
     <p>Server Addr <strong>%s:%s</strong></p>
+    <p>Extra: %s</p>
     <textarea id="input_msg"></textarea>
     <button id="send">Send</button>
     <p>↓ Scan QR code to quickly enter this page ↓</p>
@@ -61,7 +62,7 @@ class HTTPHandler(BaseHTTPRequestHandler):
 </body>
 
 </html>
-        """ % (ip, port, f"http://{ip}:{port}")
+        """ % (ip, port, extra, f"http://{ip}:{port}")
         self.send_response(200)
         self.end_headers()
         self.wfile.write(bytes(message, "utf-8"))
@@ -79,9 +80,25 @@ class HTTPHandler(BaseHTTPRequestHandler):
 
 
 if __name__ == '__main__':
+    import argparse
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument("-index", help="index of multi local ip", default="0")
+    parser.add_argument("-extra", help="extra msg", default="")
+    args = parser.parse_args()
+    index = args.index
+    extra = args.extra
+    print(f'use index: {index}')
+    print(f'use extra: {extra}')
+
     shell_get_ip = "ifconfig | grep -Eo 'inet (addr:)?([0-9]*\.){3}[0-9]*' | grep -Eo '([0-9]*\.){3}[0-9]*' | grep -v '127.0.0.1'"
     shell_result = os.popen(shell_get_ip)
     ip = shell_result.read()[:-1]
+    print(f'all ip {ip}')
+    
+    ip = ip.split('\n')[int(index)]
+    print(f'select ip {ip}')
+
     port = 8080
     server = HTTPServer((ip, port), HTTPHandler)
     print("Starting server, listening http://%s:%s use <Ctrl-C> to stop" % (ip, port))
